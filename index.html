@@ -20,7 +20,6 @@
             background-color: #0a0a0a;
             color: #e0e0e0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
         }
 
         /* Main content area — 25% margins on each side */
@@ -29,15 +28,11 @@
             /* 100% - 25% - 25% = 50% */
             max-width: 720px;
             margin: 0 auto;
-            padding: 32px 0 80px;
+            padding: 32px 0;
         }
 
-        /* Single large news card */
+        /* Single large news card — no border, blends with background */
         .news-card {
-            background: #111118;
-            border: 1px solid #1e1e2a;
-            border-radius: 12px;
-            padding: 32px 36px;
             cursor: default;
             animation: fadeIn 0.35s ease;
         }
@@ -47,6 +42,7 @@
                 opacity: 0;
                 transform: translateY(12px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -132,14 +128,52 @@
             border-bottom-color: #7a7acc;
         }
 
-        /* News images inside text */
+        /* ─── Image types ──────────────────────────────────────────── */
+
+        /* "image" in filename — full text width */
         .news-text .news-image {
             display: block;
-            max-width: 100%;
+            width: 100%;
             height: auto;
             border-radius: 8px;
             margin: 18px 0 4px;
             border: 1px solid #1e1e2a;
+        }
+
+        /* "img" in filename — small, centered */
+        .news-text .news-image-sm {
+            display: block;
+            max-width: 60%;
+            height: auto;
+            border-radius: 8px;
+            margin: 18px auto 4px;
+            border: 1px solid #1e1e2a;
+        }
+
+        /* "banner" in filename — full page width, breaks out of container */
+        .news-banner-wrap {
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            margin-right: calc(-50vw + 50%);
+            overflow: hidden;
+        }
+
+        .news-banner-wrap .news-banner {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: none;
+            border-radius: 0;
+        }
+
+        /* Banner at the very start — no top margin, negate container padding */
+        .news-banner-start {
+            margin-top: -32px;
+            margin-bottom: 24px;
+        }
+
+        .news-banner-start .news-banner {
+            display: block;
         }
 
         .news-text .image-caption {
@@ -150,22 +184,21 @@
             letter-spacing: 0.3px;
         }
 
-        /* ─── Right sidebar: news icons ─────────────────────────────── */
+        /* ─── Right sidebar: news icons at the right edge ─────────────── */
 
         .news-sidebar {
             position: fixed;
-            right: max(12px, calc((100vw - 720px) / 2 - 80px));
-            top: 30vh;
-            /* 30% from top */
-            transform: translateY(0);
+            right: 12px;
+            top: 0;
+            bottom: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 14px;
-            max-height: 60vh;
             overflow-y: auto;
-            padding: 4px;
-            z-index: 50;
+            padding: 30vh 4px 4px;
+            z-index: 110;
+            /* above footer */
             scrollbar-width: thin;
             scrollbar-color: #2a2a3a transparent;
         }
@@ -194,7 +227,8 @@
             position: relative;
             transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
             background: #111118;
-            overflow: hidden;
+            /* Black shadow so icon is visible on any background */
+            box-shadow: 0 0 0 2px #0a0a0a, 0 0 12px rgba(0, 0, 0, 0.7);
         }
 
         .news-icon img {
@@ -216,12 +250,9 @@
             box-shadow: 0 0 20px rgba(80, 80, 160, 0.45);
         }
 
-        /* Tooltip */
-        .news-icon .tooltip {
-            position: absolute;
-            right: calc(100% + 14px);
-            top: 50%;
-            transform: translateY(-50%);
+        /* Tooltip — fixed positioning to avoid sidebar overflow clipping */
+        .news-tooltip {
+            position: fixed;
             background: #1a1a2a;
             color: #d0d0e0;
             font-size: 0.78rem;
@@ -229,17 +260,20 @@
             border-radius: 6px;
             white-space: nowrap;
             pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
             border: 1px solid #2a2a3a;
-            z-index: 60;
+            z-index: 200;
+            /* above sidebar (110) and footer (100) */
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.15s, visibility 0.15s;
         }
 
-        .news-icon:hover .tooltip {
+        .news-tooltip.visible {
+            visibility: visible;
             opacity: 1;
         }
 
-        .news-icon .tooltip::after {
+        .news-tooltip::after {
             content: "";
             position: absolute;
             right: -6px;
@@ -284,13 +318,12 @@
             background: #3a3a5a;
         }
 
-        /* Responsive */
-        @media (max-width: 1100px) {
-            .news-sidebar {
-                right: 12px;
-            }
+        html,
+        body {
+            overflow-x: hidden;
         }
 
+        /* Responsive */
         @media (max-width: 900px) {
             .news-container {
                 width: 70%;
@@ -303,17 +336,14 @@
                 padding: 20px 0;
             }
 
-            .news-card {
-                padding: 20px 18px;
-            }
-
             .news-title {
                 font-size: 1.25rem;
             }
 
             .news-sidebar {
                 right: 6px;
-                gap: 10px;
+                bottom: 0;
+                padding: 20vh 4px 4px;
             }
 
             .news-icon {
@@ -321,8 +351,8 @@
                 height: 38px;
             }
 
-            .news-icon .tooltip {
-                display: none;
+            .news-tooltip {
+                display: none !important;
             }
         }
     </style>
@@ -342,6 +372,9 @@
         <!-- Icons injected by JS -->
     </nav>
 
+    <!-- Tooltip (fixed position, controlled by JS) -->
+    <div class="news-tooltip" id="newsTooltip"></div>
+
     <!-- Footer -->
     <footer class="footer">
         Design by Lexxikka &middot; idea from telegraph
@@ -351,75 +384,375 @@
         console.log("Design by Lexxikka, idea from telegraph");
 
         // ─── News Data ────────────────────────────────────────────────
-        const newsData = [{
-            id: '0001',
-            title: 'Новый релиз фреймворка Neon.js 3.0',
-            text: `
-                <p>
-                    Вышла <strong>третья мажорная версия</strong> популярного JavaScript-фреймворка
-                    <strong>Neon.js</strong>. Главные изменения — встроенная поддержка
-                    <span class="highlight">серверных компонентов</span> и новый компилятор,
-                    который обещает <em>ускорение до 40%</em>.
-                </p>
-                <div class="quote">
-                    "Мы переписали ядро с нуля, чтобы сделать разработку ещё более
-                    предсказуемой и быстрой."
-                </div>
-                <p>
-                    Команда разработчиков отмечает, что новый компилятор написан на Rust
-                    и обеспечивает <span class="highlight">значительно более быструю сборку</span>
-                    по сравнению с предыдущей версией. Встроенная поддержка серверных компонентов
-                    позволяет рендерить интерфейсы на стороне сервера без дополнительных настроек.
-                </p>
-                <p>
-                    Кроме того, в Neon.js 3.0 появилась <em>новая система реактивности</em>,
-                    основанная на сигналах, что даёт более предсказуемое обновление состояния
-                    и упрощает отладку крупных приложений.
-                </p>
-                <img class="news-image" src="newsassets/0001_image_01.png" alt="Neon.js 3.0 preview">
-                <div class="image-caption">Интерфейс нового компилятора Neon.js 3.0 в действии</div>
-                <p>
-                    Подробности — в <a href="#">официальном блоге</a>.
-                </p>
-            `
-        }, {
-            id: '0002',
-            title: 'Квантовые вычисления: прорыв в области охлаждения кубитов',
-            text: `
-                <p>
-                    Учёные из <strong>Цюрихского университета</strong> представили новый метод
-                    охлаждения кубитов, который позволяет удерживать <span class="highlight">стабильное
-                    состояние до 12 часов</span> — втрое дольше предыдущего рекорда.
-                </p>
-                <p>
-                    Технология основана на использовании <span class="code-inline">топологических изоляторов</span>
-                    и лазерного охлаждения. Это приближает эру <em>отказоустойчивых квантовых компьютеров</em>.
-                </p>
-                <div class="quote">
-                    "Мы смогли подавить декогеренцию на беспрецедентно долгий срок.
-                    Это открывает путь к практическим квантовым вычислениям."
-                </div>
-                <p>
-                    Исследователи подчёркивают, что ключевым достижением стало использование
-                    <span class="highlight">трёхслойной топологической защиты</span>, которая
-                    изолирует кубиты от внешних электромагнитных помех. В экспериментах
-                    участвовала система из <strong>128 кубитов</strong>, и все они сохраняли
-                    когерентность в течение всего периода наблюдения.
-                </p>
-                <p>
-                    Следующий этап — масштабирование технологии до <em>1000+ кубитов</em>
-                    и интеграция с существующими квантовыми процессорами. Ожидается, что
-                    коммерческое применение станет возможным уже в <strong>2028 году</strong>.
-                </p>
-                <img class="news-image" src="newsassets/0002_image_01.png" alt="Квантовый процессор">
-                <div class="image-caption">Лабораторная установка для охлаждения кубитов в Цюрихском университете</div>
-                <p>
-                    Полный текст исследования опубликован в журнале <a href="#">Nature Physics</a>.
-                </p>
-            `
-        }];
+        // Ordered newest first — top of sidebar = most recent
+        const newsData = [
+            // ── 0019 ──────────────────────────────────────────────
+            {
+                id: '0019',
+                title: 'Искусственный интеллект научился предсказывать землетрясения',
+                text: `
+                    <p>
+                        Нейросеть <strong>DeepQuake</strong>, разработанная в <strong>Стэнфордском университете</strong>,
+                        достигла точности <span class="highlight">87%</span> в предсказании землетрясений
+                        магнитудой выше 5 баллов за <em>72 часа до события</em>.
+                    </p>
+                    <div class="quote">
+                        "Мы обучили модель на данных сейсмологических станций за последние 30 лет.
+                        ИИ улавливает паттерны, которые недоступны человеческому анализу."
+                    </div>
+                    <p>
+                        Система уже проходит тестирование в <strong>Японии</strong> и <strong>Калифорнии</strong>.
+                        Внедрение технологии может спасти тысячи жизней.
+                    </p>
+                `
+            },
+            // ── 0018 ──────────────────────────────────────────────
+            {
+                id: '0018',
+                title: 'Представлен первый в мире биопроцессор на клетках мозга',
+                text: `
+                    <p>
+                        Швейцарский стартап <strong>NeuroSyn</strong> представил <span class="highlight">биологический процессор</span>,
+                        использующий выращенные в лаборатории нейроны для вычислений. Чип потребляет
+                        в <em>10 000 раз меньше энергии</em>, чем традиционные кремниевые аналоги.
+                    </p>
+                    <p>
+                        Процессор способен обучаться в реальном времени и уже продемонстрировал
+                        высокую эффективность в задачах <strong>распознавания образов</strong>.
+                    </p>
+                `
+            },
+            // ── 0017 ──────────────────────────────────────────────
+            {
+                id: '0017',
+                title: 'Китай запустил крупнейшую в мире плавучую солнечную ферму',
+                text: `
+                    <p>
+                        В провинции <strong>Шаньдун</strong> введена в эксплуатацию плавучая солнечная
+                        электростанция мощностью <span class="highlight">2,1 ГВт</span> — крупнейшая в мире.
+                    </p>
+                    <p>
+                        Станция занимает площадь <em>45 км²</em> на поверхности водохранилища
+                        и способна обеспечить электроэнергией <strong>1,5 млн домохозяйств</strong>.
+                    </p>
+                `
+            },
+            // ── 0016 ──────────────────────────────────────────────
+            {
+                id: '0016',
+                title: 'Разработан аккумулятор с плотностью энергии 900 Вт·ч/кг',
+                text: `
+                    <p>
+                        Инженеры <strong>MIT</strong> создали прототип литий-серного аккумулятора
+                        с рекордной плотностью энергии <span class="highlight">900 Вт·ч/кг</span> —
+                        вдвое больше лучших литий-ионных аналогов.
+                    </p>
+                    <div class="quote">
+                        "Мы решили проблему деградации серного катода с помощью новой
+                        углеродной наноструктуры."
+                    </div>
+                    <p>
+                        Коммерциализация технологии ожидается в <em>2027–2028 годах</em>.
+                    </p>
+                `
+            },
+            // ── 0015 ──────────────────────────────────────────────
+            {
+                id: '0015',
+                title: 'Открыт новый вид глубоководных осьминогов у берегов Антарктиды',
+                text: `
+                    <p>
+                        Международная экспедиция обнаружила на глубине <strong>4 500 метров</strong>
+                        новый вид осьминогов, получивший название <span class="highlight">Octopus antarcticus profundis</span>.
+                    </p>
+                    <p>
+                        Уникальная особенность — способность выживать при температуре воды
+                        <em>до −2°C</em> благодаря особому белку-антифризу в крови.
+                    </p>
+                `
+            },
+            // ── 0014 ──────────────────────────────────────────────
+            {
+                id: '0014',
+                title: 'В Японии запущен первый поезд на магнитной левитации 7-го поколения',
+                text: `
+                    <p>
+                        Компания <strong>JR Central</strong> представила поезд <span class="highlight">SCMaglev L0</span>,
+                        который развил скорость <strong>623 км/ч</strong> на тестовом участке.
+                    </p>
+                    <p>
+                        Новая система левитации снижает энергопотребление на <em>30%</em>
+                        по сравнению с предыдущим поколением. Запуск регулярного сообщения
+                        по маршруту <span class="code-inline">Токио — Осака</span> запланирован на <strong>2034 год</strong>.
+                    </p>
+                `
+            },
+            // ── 0013 ──────────────────────────────────────────────
+            {
+                id: '0013',
+                title: 'Учёные впервые наблюдали квантовую запутанность в живых клетках',
+                text: `
+                    <p>
+                        Исследователи из <strong>Оксфорда</strong> впервые зафиксировали
+                        <span class="highlight">квантовую запутанность</span> между молекулами
+                        внутри живых бактерий <em>E. coli</em>.
+                    </p>
+                    <div class="quote">
+                        "Это открытие ставит под вопрос границу между квантовым и классическим
+                        миром в биологических системах."
+                    </div>
+                    <p>
+                        Результаты могут найти применение в <strong>квантовой биологии</strong>
+                        и создании сверхчувствительных биосенсоров.
+                    </p>
+                `
+            },
+            // ── 0012 ──────────────────────────────────────────────
+            {
+                id: '0012',
+                title: 'Google представил квантовый компьютер с 10 000 кубитов',
+                text: `
+                    <p>
+                        <strong>Google Quantum AI</strong> анонсировал процессор <span class="highlight">Sycamore 3</span>,
+                        содержащий <strong>10 000 физических кубитов</strong> — в 10 раз больше
+                        предыдущего рекорда.
+                    </p>
+                    <p>
+                        Новый процессор способен выполнить вычисление за <em>секунды</em>,
+                        которое на классическом суперкомпьютере заняло бы <strong>10 000 лет</strong>.
+                    </p>
+                `
+            },
+            // ── 0011 ──────────────────────────────────────────────
+            {
+                id: '0011',
+                title: 'На Марсе обнаружены следы древнего океана',
+                text: `
+                    <p>
+                        Данные марсохода <strong>Perseverance</strong> подтвердили наличие
+                        <span class="highlight">осадочных пород</span>, сформировавшихся на дне
+                        древнего океана, покрывавшего северное полушарие Марса <em>3,5 млрд лет назад</em>.
+                    </p>
+                    <p>
+                        Анализ образцов показал присутствие <strong>глинистых минералов</strong>,
+                        которые могли бы сохранить следы древней микробной жизни.
+                    </p>
+                `
+            },
+            // ── 0010 ──────────────────────────────────────────────
+            {
+                id: '0010',
+                title: 'Создан самый тонкий в мире материал толщиной в один атом',
+                text: `
+                    <p>
+                        Физики из <strong>Манчестерского университета</strong> синтезировали
+                        <span class="highlight">золотой графен</span> — двумерный слой золота
+                        толщиной в <em>один атом</em>.
+                    </p>
+                    <p>
+                        Материал обладает уникальными <strong>каталитическими свойствами</strong>
+                        и может произвести революцию в производстве <span class="code-inline">зелёного водорода</span>.
+                    </p>
+                `
+            },
+            // ── 0009 ──────────────────────────────────────────────
+            {
+                id: '0009',
+                title: 'В Шотландии запущена крупнейшая в мире приливная электростанция',
+                text: `
+                    <p>
+                        У побережья <strong>Оркнейских островов</strong> начала работу приливная
+                        электростанция <span class="highlight">Orkney Tidal Array</span> мощностью
+                        <strong>120 МВт</strong>.
+                    </p>
+                    <p>
+                        Станция использует <em>24 подводных турбины</em>, которые вырабатывают
+                        электроэнергию для <strong>80 000 домохозяйств</strong> с минимальным
+                        воздействием на морскую экосистему.
+                    </p>
+                `
+            },
+            // ── 0008 ──────────────────────────────────────────────
+            {
+                id: '0008',
+                title: 'ИИ-модель DeepMind расшифровала 200 миллионов белков',
+                text: `
+                    <p>
+                        Обновлённая версия <strong>AlphaFold 3</strong> предсказала структуры
+                        <span class="highlight">200 миллионов белков</span> — практически всех
+                        известных науке.
+                    </p>
+                    <div class="quote">
+                        "Это завершает эру расшифровки белков вручную. Теперь у нас есть
+                        карта всех строительных блоков жизни."
+                    </div>
+                    <p>
+                        База данных доступна бесплатно для всех исследователей мира.
+                    </p>
+                `
+            },
+            // ── 0007 ──────────────────────────────────────────────
+            {
+                id: '0007',
+                title: 'SpaceX успешно испытала многоразовый корабль нового поколения',
+                text: `
+                    <p>
+                        <strong>Starship Mk3</strong> совершил успешный орбитальный полёт
+                        и <span class="highlight">вернулся на стартовую площадку</span>
+                        через 4 часа после запуска.
+                    </p>
+                    <p>
+                        Корабль способен доставлять <em>до 150 тонн груза</em> на низкую
+                        опорную орбиту. Следующая миссия — <strong>пилотируемый облёт Луны</strong>
+                        в 2027 году.
+                    </p>
+                `
+            },
+            // ── 0006 ──────────────────────────────────────────────
+            {
+                id: '0006',
+                title: 'В Японии создан первый полностью перерабатываемый смартфон',
+                text: `
+                    <p>
+                        Компания <strong>Sharp</strong> представила смартфон <span class="highlight">EcoPhone Zero</span>,
+                        который на <strong>100%</strong> состоит из перерабатываемых материалов.
+                    </p>
+                    <p>
+                        Корпус выполнен из <em>биоразлагаемого полимера</em>, а аккумулятор
+                        извлекается без специальных инструментов. Устройство не содержит
+                        <span class="code-inline">редкоземельных металлов</span>.
+                    </p>
+                `
+            },
+            // ── 0005 ──────────────────────────────────────────────
+            {
+                id: '0005',
+                title: 'Обнаружена ближайшая к Земле чёрная дыра',
+                text: `
+                    <p>
+                        Астрономы <strong>ESO</strong> обнаружили чёрную дыру звёздной массы
+                        на расстоянии всего <span class="highlight">1 600 световых лет</span>
+                        от Земли в созвездии <em>Змееносца</em>.
+                    </p>
+                    <p>
+                        Объект, получивший обозначение <span class="code-inline">Gaia BH3</span>,
+                        в <strong>33 раза</strong> массивнее Солнца и является второй
+                        по близости известной чёрной дырой.
+                    </p>
+                `
+            },
+            // ── 0004 ──────────────────────────────────────────────
+            {
+                id: '0004',
+                title: 'Учёные вырастили мини-печень из стволовых клеток',
+                text: `
+                    <p>
+                        Команда из <strong>Токийского университета</strong> успешно вырастила
+                        <span class="highlight">функциональную мини-печень</span> из индуцированных
+                        плюрипотентных стволовых клеток (iPSC).
+                    </p>
+                    <div class="quote">
+                        "Органоид полностью имитирует функции человеческой печени и может
+                        использоваться для тестирования лекарств."
+                    </div>
+                    <p>
+                        Трансплантация пациенту запланирована на <em>2028 год</em>.
+                    </p>
+                `
+            },
+            // ── 0003 ──────────────────────────────────────────────
+            {
+                id: '0003',
+                title: 'Новый материал на основе графена очищает воду за секунды',
+                text: `
+                    <p>
+                        Учёные из <strong>Сингапура</strong> разработали мембрану из
+                        <span class="highlight">оксида графена</span>, которая способна
+                        очищать воду от <strong>99,9% загрязнителей</strong> за <em>доли секунды</em>.
+                    </p>
+                    <p>
+                        Мембрана пропускает молекулы воды, но задерживает <span class="code-inline">тяжёлые металлы</span>,
+                        бактерии и вирусы. Технология уже готовится к массовому производству.
+                    </p>
+                `
+            },
+            // ── 0002 ──────────────────────────────────────────────
+            {
+                id: '0002',
+                title: 'Квантовые вычисления: прорыв в области охлаждения кубитов',
+                banner: 'newsassets/0002_banner.png',
+                bannerStart: false,
+                text: `
+                    <p>
+                        Учёные из <strong>Цюрихского университета</strong> представили новый метод
+                        охлаждения кубитов, который позволяет удерживать <span class="highlight">стабильное
+                        состояние до 12 часов</span> — втрое дольше предыдущего рекорда.
+                    </p>
+                    <p>
+                        Технология основана на использовании <span class="code-inline">топологических изоляторов</span>
+                        и лазерного охлаждения. Это приближает эру <em>отказоустойчивых квантовых компьютеров</em>.
+                    </p>
+                    <div class="quote">
+                        "Мы смогли подавить декогеренцию на беспрецедентно долгий срок.
+                        Это открывает путь к практическим квантовым вычислениям."
+                    </div>
+                    <p>
+                        Исследователи подчёркивают, что ключевым достижением стало использование
+                        <span class="highlight">трёхслойной топологической защиты</span>, которая
+                        изолирует кубиты от внешних электромагнитных помех. В экспериментах
+                        участвовала система из <strong>128 кубитов</strong>, и все они сохраняли
+                        когерентность в течение всего периода наблюдения.
+                    </p>
+                    <p>
+                        Следующий этап — масштабирование технологии до <em>1000+ кубитов</em>
+                        и интеграция с существующими квантовыми процессорами. Ожидается, что
+                        коммерческое применение станет возможным уже в <strong>2028 году</strong>.
+                    </p>
+                    <img class="news-image" src="newsassets/0002_image_01.png" alt="Квантовый процессор">
+                    <div class="image-caption">Лабораторная установка для охлаждения кубитов в Цюрихском университете</div>
+                    <p>
+                        Полный текст исследования опубликован в журнале <a href="#">Nature Physics</a>.
+                    </p>
+                `
+            },
+            // ── 0001 ──────────────────────────────────────────────
+            {
+                id: '0001',
+                title: 'Новый релиз фреймворка Neon.js 3.0',
+                banner: 'newsassets/0001_banner.png',
+                bannerStart: true,
+                text: `
+                    <p>
+                        Вышла <strong>третья мажорная версия</strong> популярного JavaScript-фреймворка
+                        <strong>Neon.js</strong>. Главные изменения — встроенная поддержка
+                        <span class="highlight">серверных компонентов</span> и новый компилятор,
+                        который обещает <em>ускорение до 40%</em>.
+                    </p>
+                    <div class="quote">
+                        "Мы переписали ядро с нуля, чтобы сделать разработку ещё более
+                        предсказуемой и быстрой."
+                    </div>
+                    <p>
+                        Команда разработчиков отмечает, что новый компилятор написан на Rust
+                        и обеспечивает <span class="highlight">значительно более быструю сборку</span>
+                        по сравнению с предыдущей версией. Встроенная поддержка серверных компонентов
+                        позволяет рендерить интерфейсы на стороне сервера без дополнительных настроек.
+                    </p>
+                    <p>
+                        Кроме того, в Neon.js 3.0 появилась <em>новая система реактивности</em>,
+                        основанная на сигналах, что даёт более предсказуемое обновление состояния
+                        и упрощает отладку крупных приложений.
+                    </p>
+                    <img class="news-image" src="newsassets/0001_image_01.png" alt="Neon.js 3.0 preview">
+                    <div class="image-caption">Интерфейс нового компилятора Neon.js 3.0 в действии</div>
+                    <p>
+                        Подробности — в <a href="#">официальном блоге</a>.
+                    </p>
+                `
+            }
+        ];
 
-        let currentNewsId = '0001';
+        let currentNewsId = '0019';
 
         // ─── Render single news ───────────────────────────────────────
         function renderNews(id) {
@@ -429,9 +762,29 @@
 
             currentNewsId = id;
 
+            // Build banner HTML — wrapped in full-width container, OUTSIDE the card
+            let bannerBefore = '';
+            let bannerAfter = '';
+
+            if (item.banner) {
+                const bannerHtml = `
+                    <div class="news-banner-wrap${item.bannerStart ? ' news-banner-start' : ''}">
+                        <img class="news-banner" src="${item.banner}" alt="">
+                    </div>
+                `;
+
+                if (item.bannerStart) {
+                    bannerBefore = bannerHtml;
+                } else {
+                    bannerAfter = bannerHtml;
+                }
+            }
+
             feed.innerHTML = `
+                ${bannerBefore}
                 <article class="news-card">
                     <h2 class="news-title">${item.title}</h2>
+                    ${bannerAfter}
                     <div class="news-text">${item.text}</div>
                 </article>
             `;
@@ -442,20 +795,57 @@
             });
         }
 
+        // ─── Tooltip element ──────────────────────────────────────────
+        const tooltipEl = document.getElementById('newsTooltip');
+        let hoveredIcon = null;
+
+        function positionTooltip(el) {
+            const rect = el.getBoundingClientRect();
+            const x = rect.left;
+            const y = rect.top + rect.height / 2;
+            tooltipEl.style.right = (window.innerWidth - x + 12) + 'px';
+            tooltipEl.style.top = (y - tooltipEl.offsetHeight / 2) + 'px';
+        }
+
+        function showTooltip(el) {
+            hoveredIcon = el;
+            tooltipEl.textContent = decodeURIComponent(el.dataset.title);
+            positionTooltip(el);
+            tooltipEl.classList.add('visible');
+        }
+
+        function hideTooltip() {
+            hoveredIcon = null;
+            tooltipEl.classList.remove('visible');
+        }
+
         // ─── Render sidebar icons ─────────────────────────────────────
         function renderSidebar() {
             const sidebar = document.getElementById('newsSidebar');
 
-            sidebar.innerHTML = newsData.map(item => `
+            sidebar.innerHTML = newsData.map(item => {
+                // Store title in a JS-safe way using encodeURIComponent
+                const safeTitle = encodeURIComponent(item.title);
+                return `
                 <div class="news-icon${item.id === currentNewsId ? ' active' : ''}"
                      data-id="${item.id}"
-                     onclick="renderNews('${item.id}')">
+                     data-title="${safeTitle}"
+                     onclick="renderNews('${item.id}')"
+                     onmouseenter="showTooltip(this)"
+                     onmouseleave="hideTooltip()">
                     <img src="newsassets/${item.id}_icon.png"
                          alt="${item.title}"
                          loading="lazy">
-                    <span class="tooltip">${item.title}</span>
                 </div>
-            `).join('');
+                `;
+            }).join('');
+
+            // Update tooltip position on scroll if visible
+            sidebar.addEventListener('scroll', function () {
+                if (hoveredIcon) {
+                    positionTooltip(hoveredIcon);
+                }
+            });
         }
 
         // ─── Init ─────────────────────────────────────────────────────
