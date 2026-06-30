@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Имени новотей Лексики</title>
+    <title>Имени новостей Лексики</title>
     <link rel="icon" type="image/png" href="assets/icon.png">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Tektur:wght@400..900&family=Unbounded:wght@200..900&display=swap');
+        
         *,
         *::before,
         *::after {
@@ -18,14 +20,15 @@
         body {
             background-color: #0a0a0a;
             color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Unbounded', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 300;
         }
 
         .news-container {
             width: 50%;
             max-width: 720px;
             margin: 0 auto;
-            padding: 32px 0;
+            padding: 32px 0 80px;
         }
 
         .news-card {
@@ -46,11 +49,13 @@
         }
 
         .news-title {
+            font-family: 'Russo One', sans-serif;
             font-size: 1.6rem;
-            font-weight: 600;
+            font-weight: 400;
             color: #f0f0f0;
             margin-bottom: 20px;
             line-height: 1.4;
+            letter-spacing: 0.5px;
         }
 
         .news-title::before {
@@ -81,6 +86,7 @@
         }
 
         .news-text .quote {
+            font-family: 'Russo One', sans-serif;
             border-left: 3px solid #4a4a7a;
             padding: 10px 20px;
             margin: 16px 0;
@@ -88,6 +94,8 @@
             font-style: italic;
             background: rgba(60, 60, 120, 0.06);
             border-radius: 0 6px 6px 0;
+            font-weight: 400;
+            letter-spacing: 0.3px;
         }
 
         .news-text .code-inline {
@@ -121,22 +129,111 @@
             border-bottom-color: #7a7acc;
         }
 
+        .spoiler-toggle {
+            font-family: 'Unbounded', sans-serif;
+            display: block;
+            cursor: pointer;
+            color: #b0b0c8;
+            background: rgba(60, 60, 120, 0.08);
+            border: 1px solid #2a2a4a;
+            border-radius: 6px;
+            padding: 10px 16px;
+            margin: 14px 0 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+            user-select: none;
+        }
+
+        .spoiler-toggle:hover {
+            background: rgba(80, 80, 160, 0.15);
+            border-color: #4a4a7a;
+            color: #d0d0e8;
+        }
+
+        .spoiler-toggle::before {
+            content: "\25B6";
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 0.75rem;
+            transition: transform 0.25s;
+            color: #6c6c9e;
+        }
+
+        .spoiler-toggle.open::before {
+            transform: rotate(90deg);
+        }
+
+        .spoiler-content {
+            font-family: 'Tektur', sans-serif;
+            display: none;
+            border-left: 3px solid #4a4a7a;
+            padding: 12px 20px;
+            margin: 0 0 14px;
+            color: #9090a8;
+            background: rgba(60, 60, 120, 0.06);
+            border-radius: 0 6px 6px 0;
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        .spoiler-content.open {
+            display: block;
+        }
+
+        .hidden-spoiler-toggle {
+            display: inline;
+            cursor: pointer;
+            color: inherit;
+            user-select: none;
+        }
+
+        .hidden-spoiler-toggle:hover {
+            opacity: 0.7;
+        }
+
+        .hidden-spoiler-content {
+            font-family: 'Tektur', sans-serif;
+            display: none;
+            border-left: 3px solid #4a4a7a;
+            padding: 10px 18px;
+            margin: 10px 0 14px;
+            color: #9090a8;
+            background: rgba(60, 60, 120, 0.06);
+            border-radius: 0 6px 6px 0;
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        .hidden-spoiler-content.open {
+            display: block;
+        }
+
         .news-text .news-image {
             display: block;
             width: 100%;
             height: auto;
-            border-radius: 8px;
+            border-radius: 6px;
             margin: 18px 0 4px;
-            border: 1px solid #1e1e2a;
+            border: 1px solid #2a2a4a;
         }
 
         .news-text .news-image-sm {
             display: block;
             max-width: 60%;
             height: auto;
-            border-radius: 8px;
+            border-radius: 6px;
             margin: 18px auto 4px;
-            border: 1px solid #1e1e2a;
+            border: 1px solid #2a2a4a;
+        }
+
+        .news-text .image-desc {
+            display: block;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #707088;
+            margin: 4px 0 18px;
+            font-style: italic;
         }
 
         .news-banner-wrap {
@@ -210,7 +307,7 @@
             position: relative;
             transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
             background: #111118;
-            box-shadow: 0 0 0 2px #0a0a0a, 0 0 12px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 0 2px #0a0a0a, 0 0 24px 8px rgba(0, 0, 0, 0.7);
         }
 
         .news-icon img {
@@ -223,13 +320,13 @@
 
         .news-icon:hover {
             border-color: #6c6c9e;
-            box-shadow: 0 0 16px rgba(80, 80, 160, 0.3);
+            box-shadow: 0 0 32px 12px rgba(80, 80, 160, 0.3);
             transform: scale(1.1);
         }
 
         .news-icon.active {
             border-color: #8a8acc;
-            box-shadow: 0 0 20px rgba(80, 80, 160, 0.45);
+            box-shadow: 0 0 40px 16px rgba(80, 80, 160, 0.45);
         }
 
         .news-tooltip {
@@ -265,6 +362,7 @@
         }
 
         .footer {
+            font-family: 'Tektur', sans-serif;
             position: fixed;
             bottom: 0;
             left: 0;
@@ -272,9 +370,9 @@
             padding: 20px 0;
             text-align: center;
             border-top: 1px solid #1a1a2e;
-            font-size: 0.7rem;
-            color: #444;
-            letter-spacing: 1px;
+            font-size: 0.8rem;
+            color: #888;
+            letter-spacing: 1.5px;
             background-color: #0a0a0a;
             z-index: 100;
         }
@@ -344,362 +442,105 @@
 
     <div class="news-tooltip" id="newsTooltip"></div>
 
-    <footer class="footer">
-        Design by Lexxikka &middot; idea from telegraph
+    <footer class="footer" id="newsFooter">
+        footer &middot; site created accidentally
     </footer>
 
     <script>
-        console.log("Design by Lexxikka, idea from telegraph");
+        console.log("Design by Lexxikka, idea is telegraph");
+        let currentNewsId = '';
 
         const newsData = [
             {
-                id: '0019',
-                title: 'Искусственный интеллект научился предсказывать землетрясения',
-                text: `
-                    <p>
-                        Нейросеть <strong>DeepQuake</strong>, разработанная в <strong>Стэнфордском университете</strong>,
-                        достигла точности <span class="highlight">87%</span> в предсказании землетрясений
-                        магнитудой выше 5 баллов за <em>72 часа до события</em>.
-                    </p>
-                    <div class="quote">
-                        "Мы обучили модель на данных сейсмологических станций за последние 30 лет.
-                        ИИ улавливает паттерны, которые недоступны человеческому анализу."
-                    </div>
-                    <p>
-                        Система уже проходит тестирование в <strong>Японии</strong> и <strong>Калифорнии</strong>.
-                        Внедрение технологии может спасти тысячи жизней.
-                    </p>
-                `
-            },
-            {
-                id: '0018',
-                title: 'Представлен первый в мире биопроцессор на клетках мозга',
-                text: `
-                    <p>
-                        Швейцарский стартап <strong>NeuroSyn</strong> представил <span class="highlight">биологический процессор</span>,
-                        использующий выращенные в лаборатории нейроны для вычислений. Чип потребляет
-                        в <em>10 000 раз меньше энергии</em>, чем традиционные кремниевые аналоги.
-                    </p>
-                    <p>
-                        Процессор способен обучаться в реальном времени и уже продемонстрировал
-                        высокую эффективность в задачах <strong>распознавания образов</strong>.
-                    </p>
-                `
-            },
-            {
-                id: '0017',
-                title: 'Китай запустил крупнейшую в мире плавучую солнечную ферму',
-                text: `
-                    <p>
-                        В провинции <strong>Шаньдун</strong> введена в эксплуатацию плавучая солнечная
-                        электростанция мощностью <span class="highlight">2,1 ГВт</span> — крупнейшая в мире.
-                    </p>
-                    <p>
-                        Станция занимает площадь <em>45 км²</em> на поверхности водохранилища
-                        и способна обеспечить электроэнергией <strong>1,5 млн домохозяйств</strong>.
-                    </p>
-                `
-            },
-            {
-                id: '0016',
-                title: 'Разработан аккумулятор с плотностью энергии 900 Вт·ч/кг',
-                text: `
-                    <p>
-                        Инженеры <strong>MIT</strong> создали прототип литий-серного аккумулятора
-                        с рекордной плотностью энергии <span class="highlight">900 Вт·ч/кг</span> —
-                        вдвое больше лучших литий-ионных аналогов.
-                    </p>
-                    <div class="quote">
-                        "Мы решили проблему деградации серного катода с помощью новой
-                        углеродной наноструктуры."
-                    </div>
-                    <p>
-                        Коммерциализация технологии ожидается в <em>2027–2028 годах</em>.
-                    </p>
-                `
-            },
-            {
-                id: '0015',
-                title: 'Открыт новый вид глубоководных осьминогов у берегов Антарктиды',
-                text: `
-                    <p>
-                        Международная экспедиция обнаружила на глубине <strong>4 500 метров</strong>
-                        новый вид осьминогов, получивший название <span class="highlight">Octopus antarcticus profundis</span>.
-                    </p>
-                    <p>
-                        Уникальная особенность — способность выживать при температуре воды
-                        <em>до −2°C</em> благодаря особому белку-антифризу в крови.
-                    </p>
-                `
-            },
-            {
-                id: '0014',
-                title: 'В Японии запущен первый поезд на магнитной левитации 7-го поколения',
-                text: `
-                    <p>
-                        Компания <strong>JR Central</strong> представила поезд <span class="highlight">SCMaglev L0</span>,
-                        который развил скорость <strong>623 км/ч</strong> на тестовом участке.
-                    </p>
-                    <p>
-                        Новая система левитации снижает энергопотребление на <em>30%</em>
-                        по сравнению с предыдущим поколением. Запуск регулярного сообщения
-                        по маршруту <span class="code-inline">Токио — Осака</span> запланирован на <strong>2034 год</strong>.
-                    </p>
-                `
-            },
-            {
-                id: '0013',
-                title: 'Учёные впервые наблюдали квантовую запутанность в живых клетках',
-                text: `
-                    <p>
-                        Исследователи из <strong>Оксфорда</strong> впервые зафиксировали
-                        <span class="highlight">квантовую запутанность</span> между молекулами
-                        внутри живых бактерий <em>E. coli</em>.
-                    </p>
-                    <div class="quote">
-                        "Это открытие ставит под вопрос границу между квантовым и классическим
-                        миром в биологических системах."
-                    </div>
-                    <p>
-                        Результаты могут найти применение в <strong>квантовой биологии</strong>
-                        и создании сверхчувствительных биосенсоров.
-                    </p>
-                `
-            },
-            {
-                id: '0012',
-                title: 'Google представил квантовый компьютер с 10 000 кубитов',
-                text: `
-                    <p>
-                        <strong>Google Quantum AI</strong> анонсировал процессор <span class="highlight">Sycamore 3</span>,
-                        содержащий <strong>10 000 физических кубитов</strong> — в 10 раз больше
-                        предыдущего рекорда.
-                    </p>
-                    <p>
-                        Новый процессор способен выполнить вычисление за <em>секунды</em>,
-                        которое на классическом суперкомпьютере заняло бы <strong>10 000 лет</strong>.
-                    </p>
-                `
-            },
-            {
-                id: '0011',
-                title: 'На Марсе обнаружены следы древнего океана',
-                text: `
-                    <p>
-                        Данные марсохода <strong>Perseverance</strong> подтвердили наличие
-                        <span class="highlight">осадочных пород</span>, сформировавшихся на дне
-                        древнего океана, покрывавшего северное полушарие Марса <em>3,5 млрд лет назад</em>.
-                    </p>
-                    <p>
-                        Анализ образцов показал присутствие <strong>глинистых минералов</strong>,
-                        которые могли бы сохранить следы древней микробной жизни.
-                    </p>
-                `
-            },
-            {
-                id: '0010',
-                title: 'Создан самый тонкий в мире материал толщиной в один атом',
-                text: `
-                    <p>
-                        Физики из <strong>Манчестерского университета</strong> синтезировали
-                        <span class="highlight">золотой графен</span> — двумерный слой золота
-                        толщиной в <em>один атом</em>.
-                    </p>
-                    <p>
-                        Материал обладает уникальными <strong>каталитическими свойствами</strong>
-                        и может произвести революцию в производстве <span class="code-inline">зелёного водорода</span>.
-                    </p>
-                `
-            },
-            {
-                id: '0009',
-                title: 'В Шотландии запущена крупнейшая в мире приливная электростанция',
-                text: `
-                    <p>
-                        У побережья <strong>Оркнейских островов</strong> начала работу приливная
-                        электростанция <span class="highlight">Orkney Tidal Array</span> мощностью
-                        <strong>120 МВт</strong>.
-                    </p>
-                    <p>
-                        Станция использует <em>24 подводных турбины</em>, которые вырабатывают
-                        электроэнергию для <strong>80 000 домохозяйств</strong> с минимальным
-                        воздействием на морскую экосистему.
-                    </p>
-                `
-            },
-            {
-                id: '0008',
-                title: 'ИИ-модель DeepMind расшифровала 200 миллионов белков',
-                text: `
-                    <p>
-                        Обновлённая версия <strong>AlphaFold 3</strong> предсказала структуры
-                        <span class="highlight">200 миллионов белков</span> — практически всех
-                        известных науке.
-                    </p>
-                    <div class="quote">
-                        "Это завершает эру расшифровки белков вручную. Теперь у нас есть
-                        карта всех строительных блоков жизни."
-                    </div>
-                    <p>
-                        База данных доступна бесплатно для всех исследователей мира.
-                    </p>
-                `
-            },
-            {
-                id: '0007',
-                title: 'SpaceX успешно испытала многоразовый корабль нового поколения',
-                text: `
-                    <p>
-                        <strong>Starship Mk3</strong> совершил успешный орбитальный полёт
-                        и <span class="highlight">вернулся на стартовую площадку</span>
-                        через 4 часа после запуска.
-                    </p>
-                    <p>
-                        Корабль способен доставлять <em>до 150 тонн груза</em> на низкую
-                        опорную орбиту. Следующая миссия — <strong>пилотируемый облёт Луны</strong>
-                        в 2027 году.
-                    </p>
-                `
-            },
-            {
-                id: '0006',
-                title: 'В Японии создан первый полностью перерабатываемый смартфон',
-                text: `
-                    <p>
-                        Компания <strong>Sharp</strong> представила смартфон <span class="highlight">EcoPhone Zero</span>,
-                        который на <strong>100%</strong> состоит из перерабатываемых материалов.
-                    </p>
-                    <p>
-                        Корпус выполнен из <em>биоразлагаемого полимера</em>, а аккумулятор
-                        извлекается без специальных инструментов. Устройство не содержит
-                        <span class="code-inline">редкоземельных металлов</span>.
-                    </p>
-                `
-            },
-            {
-                id: '0005',
-                title: 'Обнаружена ближайшая к Земле чёрная дыра',
-                text: `
-                    <p>
-                        Астрономы <strong>ESO</strong> обнаружили чёрную дыру звёздной массы
-                        на расстоянии всего <span class="highlight">1 600 световых лет</span>
-                        от Земли в созвездии <em>Змееносца</em>.
-                    </p>
-                    <p>
-                        Объект, получивший обозначение <span class="code-inline">Gaia BH3</span>,
-                        в <strong>33 раза</strong> массивнее Солнца и является второй
-                        по близости известной чёрной дырой.
-                    </p>
-                `
-            },
-            {
-                id: '0004',
-                title: 'Учёные вырастили мини-печень из стволовых клеток',
-                text: `
-                    <p>
-                        Команда из <strong>Токийского университета</strong> успешно вырастила
-                        <span class="highlight">функциональную мини-печень</span> из индуцированных
-                        плюрипотентных стволовых клеток (iPSC).
-                    </p>
-                    <div class="quote">
-                        "Органоид полностью имитирует функции человеческой печени и может
-                        использоваться для тестирования лекарств."
-                    </div>
-                    <p>
-                        Трансплантация пациенту запланирована на <em>2028 год</em>.
-                    </p>
-                `
-            },
-            {
-                id: '0003',
-                title: 'Новый материал на основе графена очищает воду за секунды',
-                text: `
-                    <p>
-                        Учёные из <strong>Сингапура</strong> разработали мембрану из
-                        <span class="highlight">оксида графена</span>, которая способна
-                        очищать воду от <strong>99,9% загрязнителей</strong> за <em>доли секунды</em>.
-                    </p>
-                    <p>
-                        Мембрана пропускает молекулы воды, но задерживает <span class="code-inline">тяжёлые металлы</span>,
-                        бактерии и вирусы. Технология уже готовится к массовому производству.
-                    </p>
-                `
-            },
-            {
                 id: '0002',
-                title: 'Квантовые вычисления: прорыв в области охлаждения кубитов',
-                banner: 'newsassets/0002_banner.png',
+                title: 'Новая часть Межсезонья',
+                date: '30.06.2026',
+                banner: null,
                 bannerStart: false,
                 text: `
                     <p>
-                        Учёные из <strong>Цюрихского университета</strong> представили новый метод
-                        охлаждения кубитов, который позволяет удерживать <span class="highlight">стабильное
-                        состояние до 12 часов</span> — втрое дольше предыдущего рекорда.
-                    </p>
-                    <p>
-                        Технология основана на использовании <span class="code-inline">топологических изоляторов</span>
-                        и лазерного охлаждения. Это приближает эру <em>отказоустойчивых квантовых компьютеров</em>.
+                        Прошло много времени с тех пор, как я делал что-то маштабное... <em>Что-то снова изменилось!</em>
                     </p>
                     <div class="quote">
-                        "Мы смогли подавить декогеренцию на беспрецедентно долгий срок.
-                        Это открывает путь к практическим квантовым вычислениям."
+                        Что же именно?
                     </div>
                     <p>
-                        Исследователи подчёркивают, что ключевым достижением стало использование
-                        <span class="highlight">трёхслойной топологической защиты</span>, которая
-                        изолирует кубиты от внешних электромагнитных помех. В экспериментах
-                        участвовала система из <strong>128 кубитов</strong>, и все они сохраняли
-                        когерентность в течение всего периода наблюдения.
+                        Сменился цикл игры в майнкрафт!
                     </p>
                     <p>
-                        Следующий этап — масштабирование технологии до <em>1000+ кубитов</em>
-                        и интеграция с существующими квантовыми процессорами. Ожидается, что
-                        коммерческое применение станет возможным уже в <strong>2028 году</strong>.
+                        Сегодня я объявляю о начале сервера, который будет носить имя Межсезонье 2!, конечно же это нельзя назвать полноценным сервером, это локалка, где я надеюсь собрать лучших друзей и снова провести время вместе!
                     </p>
-                    <img class="news-image" src="newsassets/0002_image_01.png" alt="Квантовый процессор">
-                    <div class="image-caption">Лабораторная установка для охлаждения кубитов в Цюрихском университете</div>
+                    <div class="spoiler-toggle" onclick="toggleSpoiler(this)">
+                        О сборке.
+                    </div>
+                    <div class="spoiler-content">
+                        <p>По заветам, межсезонье будет модовой сборкой, которую собираю лично я. Каждый может предложить свой мод, но он будет рассматриваться. Тематика — техническая. В сборке уже присутствуют такие моды как Tech Reborn и его аддоны (порт великого Industrial Craft 2), а также много косметических модов.</p>
+                        <p>Кто хочет предложить мод: <span class="code-inline">mc26.1.2+fabric-latest</span></p>
+                    </div>
+                    <img class="news-image" src="newsassets/0002_image_01.png" alt="">
+                    
+                    <div class="spoiler-toggle" onclick="toggleSpoiler(this)">
+                        О MineLovely.
+                    </div>
+                    <div class="spoiler-content">
+                        Я знаю, что обещал этим летом вам третий сезон, но вот какие дела — всё конечно же идет совсем не так, как я хотел бы. Моего свободного времени не хватит на его полноценную поддержку, особенно с тем размахом, который я хочу. Всё что я скажу — может оно и будет, и кидайтесь помидорами сколько хотите, мог бы я, "майнловеле" бы жыл.
+                    </div>
+                    <img class="news-image" src="newsassets/0002_image_02.png" alt="">
+                    <div class="spoiler-toggle" onclick="toggleSpoiler(this)">
+                        Немного концепции.
+                    </div>
+                    <div class="spoiler-content">
+                        Так как сборка ещё редактируется, и по сути это единственная причина по которой у нас будет система "прыжков по мирам", которая существует для того, чтобы не отставать от обновлений модов на генерацию мира. Конечно же, это будут костыли, но мы будем переносить в новый мир часть построек и предметов, что дополнительно не даст нам перекачаться, хотя, возможно ли это?
+                    </div>
+                    <img class="news-image" src="newsassets/0002_image_03.png" alt="">
+                    <br>
                     <p>
-                        Полный текст исследования опубликован в журнале <a href="#">Nature Physics</a>.
+                        <span class="hidden-spoiler-toggle" onclick="toggleHiddenSpoiler(this)">Кто дочитал до сюда — вы интересные люди. Вот вам ссылка входа в мой секретный отсек, может быть даже кому-то из вас будет одобрен вход туда, но зачем?</span>
                     </p>
+                    <div class="hidden-spoiler-content">
+                        <a href="https://t.me/+SG7guuag3PZlMTAy">Перейти в телеграм</a>
+                    </div>
                 `
             },
             {
                 id: '0001',
-                title: 'Новый релиз фреймворка Neon.js 3.0',
+                title: 'Новый макро-проект: новости вне discord и telegram',
+                date: '30.06.2026',
                 banner: 'newsassets/0001_banner.png',
                 bannerStart: true,
                 text: `
                     <p>
-                        Вышла <strong>третья мажорная версия</strong> популярного JavaScript-фреймворка
-                        <strong>Neon.js</strong>. Главные изменения — встроенная поддержка
-                        <span class="highlight">серверных компонентов</span> и новый компилятор,
-                        который обещает <em>ускорение до 40%</em>.
+                        Теперь тут иногда будут появляться различные новости. Зачем — да кто его знает, не я это придумал (я).
+                    </p>
+                    <p>
+                        Расскажу откуда оно тут вообще — я хотел красиво рассказать о открытии <strong><em>MineLovely Between seasons 2</em></strong>, который вы знаете как <em>"Второй сезон Межсезонья"</em> или просто <strong><em>Межсезонье 2</em></strong>.
+                    </p>
+                    <p>
+                        На вопрос как опубликовать новость я на секунду задумался о telegraph, но в итоге создал этот некий "клон", но только для меня.
                     </p>
                     <div class="quote">
-                        "Мы переписали ядро с нуля, чтобы сделать разработку ещё более
-                        предсказуемой и быстрой."
+                        я не буду думать зачем и почему, да и секунды через четыре этот проект будет забыл, слава бесплатному хостингу гитхаба, сайт этот будет доступен ещё огоэыйъъ ЪЪЪъ ъ ыыыы граната
                     </div>
-                    <p>
-                        Команда разработчиков отмечает, что новый компилятор написан на Rust
-                        и обеспечивает <span class="highlight">значительно более быструю сборку</span>
-                        по сравнению с предыдущей версией. Встроенная поддержка серверных компонентов
-                        позволяет рендерить интерфейсы на стороне сервера без дополнительных настроек.
-                    </p>
-                    <p>
-                        Кроме того, в Neon.js 3.0 появилась <em>новая система реактивности</em>,
-                        основанная на сигналах, что даёт более предсказуемое обновление состояния
-                        и упрощает отладку крупных приложений.
-                    </p>
-                    <img class="news-image" src="newsassets/0001_image_01.png" alt="Neon.js 3.0 preview">
-                    <div class="image-caption">Интерфейс нового компилятора Neon.js 3.0 в действии</div>
-                    <p>
-                        Подробности — в <a href="#">официальном блоге</a>.
-                    </p>
+                    <span class="image-desc">И прошу не забывать:</span>
+                    <img class="news-image-sm" src="newsassets/001_img_01.png" alt="">
                 `
-            }
+            },
         ];
 
-        let currentNewsId = '0019';
+        function toggleSpoiler(el) {
+            el.classList.toggle('open');
+            const content = el.nextElementSibling;
+            if (content && content.classList.contains('spoiler-content')) {
+                content.classList.toggle('open');
+            }
+        }
+
+        function toggleHiddenSpoiler(el) {
+            const content = el.parentElement.nextElementSibling;
+            if (content && content.classList.contains('hidden-spoiler-content')) {
+                content.classList.toggle('open');
+            }
+        }
 
         function renderNews(id) {
             const feed = document.getElementById('newsFeed');
@@ -737,6 +578,11 @@
             document.querySelectorAll('.news-icon').forEach(el => {
                 el.classList.toggle('active', el.dataset.id === id);
             });
+
+            const footer = document.getElementById('newsFooter');
+            if (footer) {
+                footer.textContent = `Сообщение от: ${item.date}  ·  site created accidentally  ·  ID: ${item.id}`;
+            }
         }
 
         const tooltipEl = document.getElementById('newsTooltip');
@@ -790,6 +636,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             renderSidebar();
+            const latest = newsData.reduce((a, b) => a.id > b.id ? a : b);
+            currentNewsId = latest.id;
             renderNews(currentNewsId);
         });
     </script>
