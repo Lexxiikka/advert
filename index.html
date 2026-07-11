@@ -452,9 +452,28 @@
 
         const newsData = [
             {
+                id: '0003',
+                title: 'Этот сайт никому не нужен',
+                date: '11.07.2026',
+                visible: true,
+                banner: null,
+                bannerStart: false,
+                text: `
+                    <p>
+                        Я архивирую этот сайт, причина: смерть сервера, ради которого он по сути был создан. Он останется активен, и, может быть, я буду даже сюда что-то публиковать но крайне редко и крайне непонятно зачем.
+                    </p>
+                    <img class="news-image" src="newsassets/0003_image_01.png" alt="">
+                    <br>
+                    <p>
+                        Всем пока!
+                    </p>
+                `
+            },
+            {
                 id: '0002',
                 title: 'Новая часть Межсезонья',
                 date: '30.06.2026',
+                visible: true,
                 banner: null,
                 bannerStart: false,
                 text: `
@@ -510,6 +529,7 @@
                 id: '0001',
                 title: 'Новый макро-проект: новости вне discord и telegram',
                 date: '30.06.2026',
+                visible: true,
                 banner: 'newsassets/0001_banner.png',
                 bannerStart: true,
                 text: `
@@ -615,7 +635,7 @@
         function renderSidebar() {
             const sidebar = document.getElementById('newsSidebar');
 
-            sidebar.innerHTML = newsData.map(item => {
+            sidebar.innerHTML = newsData.filter(item => item.visible !== false).map(item => {
                 const safeTitle = encodeURIComponent(item.title);
                 return `
                 <div class="news-icon${item.id === currentNewsId ? ' active' : ''}"
@@ -640,7 +660,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             renderSidebar();
-            const latest = newsData.reduce((a, b) => a.id > b.id ? a : b);
+            const visibleNews = newsData.filter(n => n.visible !== false);
+            const latest = visibleNews.reduce((a, b) => a.id > b.id ? a : b);
             currentNewsId = latest.id;
             renderNews(currentNewsId);
         });
