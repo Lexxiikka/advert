@@ -451,6 +451,21 @@
         let currentNewsId = '';
 
         const newsData = [
+        {
+                id: '0004',
+                title: 'Я решил запостить сюда свою стату в СВО 6',
+                date: '22.07.2026',
+                visible: true,
+                banner: null,
+                bannerStart: false,
+                text: `
+                    <p>Новый сезон (4) начался уже, а я снова покупаю батлпасс... </p>
+                    <p>Я же не зря профиль настраивал, вот теперь буду показывать.</p>
+                    <img class="news-image" src="newsassets/0004_image_01.png" alt="">
+                    <br>
+                    <span class="image-desc">То, что сайт мертв, не значит что я не буду ничего постить!</span>
+                `
+            },
             {
                 id: '0003',
                 title: 'Этот сайт никому не нужен',
@@ -464,9 +479,9 @@
                     </p>
                     <img class="news-image" src="newsassets/0003_image_01.png" alt="">
                     <br>
-                    <p>
-                        Всем пока!
-                    </p>
+                    <div class="quote">Всем пока!</div>
+                    <br><br><br><br><br>
+                    <span class="image-desc">upd: сайт воскрес?</span>
                 `
             },
             {
@@ -531,8 +546,9 @@
                 date: '30.06.2026',
                 visible: true,
                 banner: 'newsassets/0001_banner.png',
-                bannerStart: true,
+                bannerStart: false,
                 text: `
+                    <br>
                     <p>
                         Теперь тут иногда будут появляться различные новости. Зачем — да кто его знает, не я это придумал (я).
                     </p>
